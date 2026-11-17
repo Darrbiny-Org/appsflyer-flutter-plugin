@@ -68,6 +68,9 @@ if (!builtInKotlinEnabled && !isVersionAtLeast(hostKotlinVersion, minKotlinVersi
 }
 
 def includeConnector = project.findProperty('appsflyer.enable_purchase_connector')?.toBoolean() ?: false
+def connectorSourceDir = includeConnector
+        ? 'src/main/include-connector'
+        : 'src/main/exclude-connector'
 
 android {
     defaultConfig {
@@ -95,7 +98,8 @@ android {
     sourceSets {
         main {
             java.srcDirs = ['src/main/java', 'src/main/kotlin']
-            java.srcDirs += includeConnector ? ['src/main/include-connector'] : ['src/main/exclude-connector']
+            java.srcDirs += connectorSourceDir
+            kotlin.srcDirs = ['src/main/kotlin', connectorSourceDir]
         }
         test {
             java.srcDirs = ['src/test/kotlin']
